@@ -9,25 +9,51 @@
     <title>Formulario Producto</title>
 </h:head>
 <h:body>
-    <h1><h:outputText value="#{titulo}"/></h1>
+    <f:metadata>
+        <f:viewParam name="id" value="#{productoController.id}"/>
+    </f:metadata>
+    <!--<h:messages style="color: red"/>-->
+    <h:panelGrid border="1">
+        <f:facet name="header">
+            <h:outputText value="#{producto.id>0?'Editar':'Crear'} Producto"/>
+        </f:facet>
+        <h:link outcome="index" value="Regresar"/>
+        <h:form>
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Nombre" for="nombre"/>
+                <h:inputText id="nombre" value="#{producto.nombre}" label="Nombre" />
+                <h:message for="nombre" style="color: red;"/>
 
-    <h:form>
-        <h:panelGrid columns="2">
-            <h:outputLabel value="Nombre" for="nombre"/>
-            <h:inputText id="nombre" value="#{producto.nombre}"/>
+                <h:outputLabel value="Precio" for="precio"/>
+                <h:inputText id="precio" value="#{producto.precio}" label="Precio" />
+                <h:message for="precio" style="color: red;"/>
 
-            <h:outputLabel value="Precio" for="precio"/>
-            <h:inputText id="precio" value="#{producto.precio}"/>
+                <h:outputLabel value="Sku" for="sku"/>
+                <h:inputText id="sku" value="#{producto.sku}" label="Sku" />
+                <h:message for="sku" style="color: red;"/>
 
-            <h:outputLabel value="Sku" for="sku"/>
-            <h:inputText id="sku" value="#{producto.sku}"/>
+                <h:outputLabel value="Fecha Registro" for="fechaRegistro"/>
+                <h:inputText id="fechaRegistro" value="#{producto.fechaRegistro}" label="Fecha Registro" convertMessage="El formato de la fecha es yyyy-MM-dd">
+                    <f:convertDateTime type="localDate" pattern="yyyy-MM-dd" />
+                    <f:passThroughAttribute name="type" value="date" />
+                </h:inputText>
+                <h:message for="fechaRegistro" style="color: red;"/>
 
-            <h:commandButton value="Crear" action="#{productoController.guardar}"/>
+                <h:outputLabel value="Categoria" for="categoria"/>
+                <h:selectOneMenu id="categoria" value="#{producto.categoria}">
+                    <f:selectItem itemLabel="-- Seleccione una categoría" itemValue="#{null}" />
+                    <f:selectItems value="#{categorias}" var="cat" itemLabel="#{cat.nombre}" />
+                    <f:converter binding="${categoriaConverter}"/>
+                </h:selectOneMenu>
+                <h:message for="categoria" style="color: red;"/>
 
-            <h:inputHidden id="id" value="#{producto.id}"/>
+                <h:commandButton value="#{producto.id>0?'Editar':'Crear'}" action="#{productoController.guardar}"/>
 
-        </h:panelGrid>
-    </h:form>
+                <h:inputHidden id="id" value="#{producto.id}"/>
+
+            </h:panelGrid>
+        </h:form>
+    </h:panelGrid>
 
 </h:body>
 </html>
