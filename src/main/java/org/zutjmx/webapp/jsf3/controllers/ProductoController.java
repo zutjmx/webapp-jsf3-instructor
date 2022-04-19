@@ -12,6 +12,7 @@ import org.zutjmx.webapp.jsf3.entities.Producto;
 import org.zutjmx.webapp.jsf3.services.ProductoService;
 
 import java.util.List;
+import java.util.ResourceBundle;
 
 @Model
 public class ProductoController {
@@ -19,6 +20,9 @@ public class ProductoController {
     private Producto producto;
 
     private Long id;
+
+    @Inject
+    private ResourceBundle bundle;
 
     @Inject
     private ProductoService service;
@@ -29,7 +33,8 @@ public class ProductoController {
     @Produces
     @Model
     public String titulo() {
-        return "Listado con JavaServer Faces 3.0";
+        //return "Listado con JavaServer Faces 3.0";
+        return bundle.getString("producto.texto.titulo");
     }
 
     @Produces
@@ -65,9 +70,9 @@ public class ProductoController {
     public String guardar() {
         System.out.println(producto);
         if (producto.getId() != null && producto.getId()>0) {
-            facesContext.addMessage(null,new FacesMessage("Producto " + producto.getNombre() + " actualizado con éxito."));
+            facesContext.addMessage(null,new FacesMessage(String.format(bundle.getString("producto.mensaje.editar"),producto.getNombre())));
         } else {
-            facesContext.addMessage(null,new FacesMessage("Producto " + producto.getNombre() + " creado con éxito."));
+            facesContext.addMessage(null,new FacesMessage(String.format(bundle.getString("producto.mensaje.crear"),producto.getNombre())));
         }
         service.guardar(producto);
         return "index.xhtml?faces-redirect=true";
@@ -75,7 +80,7 @@ public class ProductoController {
 
     public String eliminar(Producto producto) {
         service.eliminar(producto.getId());
-        facesContext.addMessage(null,new FacesMessage("Producto " + producto.getNombre() + " eliminado con éxito."));
+        facesContext.addMessage(null,new FacesMessage(String.format(bundle.getString("producto.mensaje.eliminar"),producto.getNombre())));
         return "index.xhtml?faces-redirect=true";
     }
 
